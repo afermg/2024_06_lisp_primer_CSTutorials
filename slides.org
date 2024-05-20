@@ -1,0 +1,261 @@
+#+title: A primer on lisp
+#+OPTIONS: ^:nil H:2 num:t toc:2
+#+DATE: 2024/06/04
+#+Author: Alán F. Muñoz
+#+LaTeX_CLASS: beamer
+#+BEAMER_THEME: metropolis
+#+BEAMER_FRAME_LEVEL: 3
+#+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
+#+PROPERTY: header-args: :tangle yes :results replace raw :exports code result :session car
+* Introduction
+** Isn't lisp a speech impediment?
+** There is no such thing as "Lisp"
+It is a family of languages
+** Some history
+** Why should I care?
+Maybe you shouldn't.
+
+** Technical stuff
+- homoiconicity
+
+** What were its innovations?
+# :PROPERTIES:
+# :BEAMER_ACT: [<-+>]
+# :END:
+- Everything is available at any time
+- Pervasive interactivity
+  - In-REPL debugger
+- Garbage collection
+
+** Minor branching: homoicoicity
+*** Python :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.4
+:BEAMER_env: exampleblock
+:END:
+
+Data:
+ - =[]= lists
+ - ={}= dicts/sets
+Code:
+ - =def= functions
+ - =class= classes
+
+*** Lisp :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.4
+:BEAMER_env: exampleblock
+:END:
+
+Data:
+ - =()=  data
+Code:
+ - =()= functions
+
+
+** So, code is data and data is code.
+# :PROPERTIES:
+# :BEAMER_ACT: [<-+>]
+# :END:
+- We can then write code that writes code.
+- Very Easily.
+
+** Is it actually useful?
+Actually, yes.
+
+Macros (not lisp-exclusive), "functions" that write functions whence inputs are used at compilation are very easy.
+
+
+** It's survey time
+- Academic products, including code, should be open source
+- Academic products
+-
+
+** How is this relevant to cure cancer?
+
+* The technical stuff
+** How does it look?
+*** Functions :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:BEAMER_col: 0.3
+:END:
+
+Functions
+#+begin_src elisp
+(f arg1 arg2 arg3)
+#+end_src
+
+*** Functions :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:BEAMER_col: 0.3
+:END:
+
+#+begin_src elisp
+(list item1 item2 item3)
+#+end_src
+
+** Scheme are a group of dialects
+- Minimalism: Replaces it with more expressiveness
+- Lexical scope:
+- Tail call optimisations
+- More functional programming
+
+* Let us play a bit
+** Basic operations
+#+begin_src elisp
+(+ 2 2)
+#+end_src
+
+#+RESULTS:
+: 4
+
+** Basic operations
+#+begin_src emacs-lisp :tangle yes
+(+ 2 (+ 1 1))
+#+end_src
+** We can use simpler notation too
+#+begin_src emacs-lisp :tangle yes
+(->  10
+      (+ 7)
+      (- 5)
+      (/ 3))
+#+end_src
+
+#+RESULTS:
+: 4
+
+** Setting variables
+#+begin_src emacs-lisp :tangle yes
+(setq var 1)
+#+end_src
+
+#+RESULTS:
+: 1
+** Lists
+#+begin_src emacs-lisp :tangle yes :session car
+(list 1 3 2 4)
+#+end_src
+
+#+RESULTS:
+| 1 | 3 | 2 | 4 |
+
+#+begin_src emacs-lisp :tangle yes :session car
+'(1 3 2 4)
+#+end_src
+
+#+RESULTS:
+| 1 | 3 | 2 | 4 |
+
+** Lists
+#+begin_src emacs-lisp :tangle yes :session car
+(setq my-list '(1 3 2 4))
+#+end_src
+
+#+RESULTS:
+| 1 | 3 | 2 | 4 |
+
+** CAR + CDR
+In any list, the first item is the value and the second is a link to the next value.
+
+#+begin_src emacs-lisp :tangle yes :session car
+(car my-list)
+#+end_src
+
+#+RESULTS:
+: 1
+
+
+#+begin_src emacs-lisp :tangle yes :session car
+(cdr my-list)
+#+end_src
+
+#+RESULTS:
+| 3 | 2 | 4 |
+
+** Wait what?
+You can see the linked list as =(1, ->) (2, ->) (3, ->) (4, END)=
+
+** =CADR= can be used for to trasverse the edges of a list
+=C{DA}R= combinations also exist. Limits are  =cdaaar= and =caaadr=.
+#+begin_src emacs-lisp :tangle yes :session car
+(cadr my-list)
+#+end_src
+
+#+RESULTS:
+: 3
+
+** There is also a boring =nth=
+Note that it is zero-indexed.
+#+begin_src emacs-lisp :tangle yes :session car
+(nth 2 my-list)
+#+end_src
+
+#+RESULTS:
+: 2
+
+** Essentials
+Lambda
+#+begin_src emacs-lisp :results replace raw
+( lambda ( x ) (+ 1  x))
+#+end_src
+
+#+RESULTS:
+(lambda (x) (+ 1 x))
+
+It returns a function
+#+begin_src emacs-lisp
+(( lambda ( x ) (+ 1  x)) 2)
+#+end_src
+
+#+RESULTS:
+: 3
+
+or the built-in =1+=
+
+#+begin_src emacs-lisp
+(1+ 2)
+#+end_src
+
+#+RESULTS:
+: 3
+
+** Essentials
+Apply to list
+#+begin_src emacs-lisp :tangle yes
+(mapcar '1+ my-list)
+#+end_src
+
+#+RESULTS:
+| 2 | 4 | 3 | 5 |
+
+** Essentials
+
+** CAR
+#+begin_src emacs-lisp :tangle yes :session car
+#+end_src
+
+* Conclusions
+** There is a Lisp for everyone
+There is a lisp for everyone
+- General purpose, old and reliable? =Common Lisp= (Steel Bank Common Lisp - SBCL)
+- Need access to Java libraries + Functional? =Clojure=
+- Learn Programming Language Theory, Build Doman-Specific Languages (DSL)? =Scheme/Racket=
+- Need more Emacs in your life or some life in your Emacs? =Emacs Lisp= (eLisp)
+- Nix but in a sensible language? =Scheme/GNU Guile=
+- Need =Lua= configs but miss parentheses? =Fennel=
+- Lisp-flavoured =Python=? =Hy=
+
+** Takeaways
+- The tools we use determine what we can do and not
+- Even if not in daily use, it offers many insight
+
+** The land of lisp and other wonders
+[[./imgs/lisp_cycles.png]]
+
+- [[https://youtu.be/HM1Zb3xmvMc?si=OEEVQuGmUVdf0gnn&t=63][click me to see the wonders of the world]]
+
+** For those interested
+- [[https://elliottslaughter.com/2022/12/lisp][Lisp innovations]]
+- [[https://paulgraham.com/progbot.html][Paul graham on "Programming bottom up"]]
