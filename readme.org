@@ -41,7 +41,9 @@ For this presentation I needed the logos for lisps
 
 ** Convert svgs to png
 #+begin_src elisp 
-(mapcar (lambda (x)  (shell-command ( format "inkscape -h 512 imgs/%s -o imgs/%spng" x (string-remove-suffix "svg" x ) ))) (directory-files "imgs" nil (rx ".svg" eos)))
+(mapcar (lambda (x) (shell-command
+(format "inkscape -h 512 imgs/%s -o imgs/%spng" x (string-remove-suffix "svg" x ))))
+(directory-files "imgs" nil (rx ".svg" eos)))
 #+end_src
 
 #+RESULTS:

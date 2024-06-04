@@ -557,7 +557,6 @@ Task: Extend =elisp= to add support for list comprehension.
 #+RESULTS:
 : range
 
-
 #+begin_src emacs-lisp
 (lcomp x for x in (range 10) if (= (mod x 2) 0))
 #+end_src
