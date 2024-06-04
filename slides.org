@@ -5,27 +5,58 @@
 #+LaTeX_CLASS: beamer
 #+BEAMER_THEME: metropolis
 #+BEAMER_FRAME_LEVEL: 3
+#+LATEX_HEADER: \usepackage{ragged2e}
+#+latex_header: \usepackage{xcolor}
+#+LATEX_HEADER: \usepackage{minted}
+#+LATEX_HEADER: \newenvironment{JUSTIFYRIGHT}{\begin{FlushRight}}{\end{FlushRight}}
+#+PROPERTY: header-args:emacs-lisp :session *emacs-lisp* :eval yes :exports both :results verbatim
 #+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
-#+PROPERTY: header-args: :tangle yes :results replace raw :exports code result :session car
+
 * Introduction
-** Isn't lisp a speech impediment?
-** There is no such thing as "Lisp"
-It is a family of languages
-** Some history
-** Why should I care?
-Maybe you shouldn't.
+** My Computer Science trumvirate
+- @@b:<1->@@ On the universality of plain text (2024/01/09)
+- @@b:<2->@@ A primer on Lisp (2024/06/04)
+- @@b:<3->@@ Emacs: The Editor of a Lifetime (?)
 
-** Technical stuff
-- homoiconicity
+** There is no such thing as "the Lisp"
+- The name *Lisp* derives from "List Processing".
+- It is a family of functional programming languages (1958).
+- Influenced by lambda calculus (Mathematical abstractions of computation).
 
-** What were its innovations?
-# :PROPERTIES:
-# :BEAMER_ACT: [<-+>]
-# :END:
-- Everything is available at any time
-- Pervasive interactivity
-  - In-REPL debugger
-- Garbage collection
+** Why?
+#+begin_quote
+One of the motivations was that he (John McCarthy) wanted something like “Mathematical Physics” — he called it a “Mathematical Theory of Computation”. Another was that he needed a very general kind of language to make a user interface AI — called “The Advice Taker” — that he had thought up in the late 50s.
+#+end_quote
+#+begin_JUSTIFYRIGHT
+Alan Kay (@Quora), 2018
+#+end_JUSTIFYRIGHT
+
+** Bits of history
+ - Designed by John McCarthy (1958); Implemented by Steve Rusell.
+ - It was tightly coupled to (OG) Artificial Inteligence
+ - The Common Lisp specification was developed in 1984
+
+** The original paper is really old
+[[./imgs/mccarthy_paper.png]]
+** To put the 50s into context
+#+ATTR_LATEX: width=0.5\linewidth
+[[./imgs/timeline.png]]
+
+** On Lisp simplicity
+#+begin_quote
+McCarthy built Lisp out of parts so fundamental that it is hard to say whether he invented it or discovered it.
+#+end_quote
+#+begin_JUSTIFYRIGHT
+Sinclair Target, 2018
+#+end_JUSTIFYRIGHT
+
+** What were its main innovations?
+- @@b:<1->@@ Everything (vars, fns) is available at any time
+- @@b:<2->@@ Pervasive interactivity (*first*)
+- @@b:<3->@@ Garbage collection (*first*)
+
+** But its biggest feature is homoiconicity
+The code and its data are the same, thus we can process Lisp data with Lisp.
 
 ** Minor branching: homoicoicity
 *** Python :B_exampleblock:BMCOL:
@@ -40,6 +71,14 @@ Data:
 Code:
  - =def= functions
  - =class= classes
+Example:
+
+#+begin_src python :session py :eval yes :exports both
+[1, 2, 3]
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 |
 
 *** Lisp :B_exampleblock:BMCOL:
 :PROPERTIES:
@@ -48,63 +87,94 @@ Code:
 :END:
 
 Data:
- - =()=  data
+ - =()=  all lists
 Code:
- - =()= functions
+ - =()= functions/classes
+Example:
+#+begin_src emacs-lisp
+'(1 2 3)
+#+end_src
 
+#+RESULTS:
+: (1 2 3)
 
 ** So, code is data and data is code.
-# :PROPERTIES:
-# :BEAMER_ACT: [<-+>]
-# :END:
+
 - We can then write code that writes code.
-- Very Easily.
+- Modifying underlying code (even at compilation is quite easy)
 
-** Is it actually useful?
-Actually, yes.
+Macros (not lisp-exclusive) are "functions" that write functions whose inputs are used at compilation.
 
-Macros (not lisp-exclusive), "functions" that write functions whence inputs are used at compilation are very easy.
+** It is hard to explain why this matters
+#+begin_quote
+"Then what is it that makes Lisp so hard to understand? ...
+Metaprogramming, code and data in one representation, self-modifying programs, domain specific mini-languages, none of the explanations for these concepts referenced familiar territory. How could I expect anyone to understand them!"
+#+end_quote
+#+begin_JUSTIFYRIGHT
+Slava Akhmechet, 2006
+#+end_JUSTIFYRIGHT
+** I will play the enlightenment card
+#+begin_quote
+"Lisp is worth learning for the profound enlightenment experience you will have when you finally get it; that experience will make you a better programmer for the rest of your days, even if you never actually use Lisp itself a lot." I never understood this statement. I never believed it could be true. And finally, after all the pain, it made sense!
+#+end_quote
+#+begin_JUSTIFYRIGHT
+The same bloke as before, a few paragraphs later
+#+end_JUSTIFYRIGHT
 
+* Use-cases
+** What are the day-to-day use-cases?
+- Prototyping.
+- Replacing unruly bash scripts.
+- Files+Math processing to avoid python.
+- Extending Emacs.
+- Compiling files ot other languages (e.g., Fennel->Lua)
+- Manage your operative system (Guile in Guix)
+- Just learning one of the most influential languages and see its ideas elsewhere
 
-** It's survey time
-- Academic products, including code, should be open source
-- Academic products
--
-
-** How is this relevant to cure cancer?
-
-* The technical stuff
+** Integrates perfectly with reproducible org-mode notebooks
+#+ATTR_LATEX: :width 0.75 \linewidth
+[[./imgs/org_lisp.png]]
+**
+** Who uses Lisp anyways?
+*** Grammarly (CL)
+*** The London Tube (CL)!
+*** Walmart (Clojure)
+*** Puppet (and hence the Broad, Clojure)
+*** Nubank (Clojure)
+*** Hacker News
+* Technical bits
 ** How does it look?
-*** Functions :B_exampleblock:BMCOL:
+*** Functions :B_exampleblock:
 :PROPERTIES:
 :BEAMER_env: exampleblock
-:BEAMER_col: 0.3
 :END:
 
-Functions
-#+begin_src elisp
+#+begin_src emacs-lisp :exports code :eval no
 (f arg1 arg2 arg3)
 #+end_src
 
-*** Functions :B_exampleblock:BMCOL:
+*** Data :B_exampleblock:BMCOL:
 :PROPERTIES:
 :BEAMER_env: exampleblock
-:BEAMER_col: 0.3
 :END:
 
-#+begin_src elisp
+#+begin_src emacs-lisp :exports code :eval no
 (list item1 item2 item3)
 #+end_src
+or
+#+begin_src emacs-lisp :exports code :eval no
+'(item1 item2 item3)
+#+end_src
 
-** Scheme are a group of dialects
+** Scheme are a subfamily of lisp dialects
 - Minimalism: Replaces it with more expressiveness
-- Lexical scope:
-- Tail call optimisations
-- More functional programming
+- Lexical scope: You can have the same name in nested functions.
+- Tail call optimisations: The compiler optimises recurison.
+- Higher focus on functional paradigm.
 
-* Let us play a bit
+* Playground
 ** Basic operations
-#+begin_src elisp
+#+begin_src emacs-lisp
 (+ 2 2)
 #+end_src
 
@@ -112,15 +182,8 @@ Functions
 : 4
 
 ** Basic operations
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
 (+ 2 (+ 1 1))
-#+end_src
-** We can use simpler notation too
-#+begin_src emacs-lisp :tangle yes
-(->  10
-      (+ 7)
-      (- 5)
-      (/ 3))
 #+end_src
 
 #+RESULTS:
@@ -128,38 +191,120 @@ Functions
 
 ** Setting variables
 #+begin_src emacs-lisp :tangle yes
-(setq var 1)
+(setq a 1)
 #+end_src
 
 #+RESULTS:
 : 1
+
+For =FP= fans: let-in structures are the norm.
+#+begin_src emacs-lisp :tangle yes
+(let  ((a 3)
+       (b 2))
+   (+ a b))
+#+end_src
+
+#+RESULTS:
+: 5
+
+** The primitive data type: Cons
+#+begin_src emacs-lisp
+(setq cons-cell (cons 'rose 'violet) )
+cons-cell
+#+end_src
+
+#+RESULTS:
+: (rose . violet)
+
+Equivalent to
+#+begin_src emacs-lisp
+'(rose . violet)
+#+end_src
+
+** CAR and CDR access Cons cells
+
+*** Column 1
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+This is how a cons cell looks
+#+begin_src emacs-lisp
+cons-cell
+#+end_src
+#+begin_example
+ --- ---
+|   |   |--> violet
+ --- ---
+|
+|
+--> rose
+#+end_example
+
+*** Column 1 :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+#+begin_src emacs-lisp
+(car cons-cell)
+#+end_src
+
+#+begin_src emacs-lisp
+(cdr cons-cell)
+#+end_src
+** From this primitive we can build lists
+:PROPERTIES:
+:BEAMER_ACT: [<+->]
+:END:
+
+*** Connected cons cells are lists
+#+begin_src emacs-lisp
+'(rose . (violet . (buttercup)))
+#+end_src
+
+#+RESULTS:
+: (rose violet buttercup)
+
+*** Using "List"
+#+begin_src emacs-lisp
+(list 'rose 'violet 'buttercup)
+#+end_src
+
+#+RESULTS:
+: (rose violet buttercup)
+
+** A diagram shows the linked-list structure
+#+begin_src emacs-lisp
+(list 'rose 'violet 'buttercup)
+#+end_src
+
+#+begin_example
+    --- ---      --- ---      --- ---
+   |   |   |--> |   |   |--> |   |   |--> nil
+    --- ---      --- ---      --- ---
+     |            |            |
+     |            |            |
+      --> rose     --> violet   --> buttercup
+#+end_example
+
 ** Lists
-#+begin_src emacs-lisp :tangle yes :session car
+Lists have their own constructor
+#+begin_src emacs-lisp
 (list 1 3 2 4)
 #+end_src
 
 #+RESULTS:
-| 1 | 3 | 2 | 4 |
+: (1 3 2 4)
 
-#+begin_src emacs-lisp :tangle yes :session car
+Equivalent to a quote (='=)
+#+begin_src emacs-lisp
 '(1 3 2 4)
 #+end_src
 
-#+RESULTS:
-| 1 | 3 | 2 | 4 |
-
-** Lists
-#+begin_src emacs-lisp :tangle yes :session car
-(setq my-list '(1 3 2 4))
-#+end_src
-
-#+RESULTS:
-| 1 | 3 | 2 | 4 |
-
-** CAR + CDR
+** CAR + CDR on lists
 In any list, the first item is the value and the second is a link to the next value.
 
-#+begin_src emacs-lisp :tangle yes :session car
+#+begin_src emacs-lisp
+(setq my-list '(1 3 2 4))
 (car my-list)
 #+end_src
 
@@ -167,46 +312,79 @@ In any list, the first item is the value and the second is a link to the next va
 : 1
 
 
-#+begin_src emacs-lisp :tangle yes :session car
+#+begin_src emacs-lisp
 (cdr my-list)
 #+end_src
 
 #+RESULTS:
-| 3 | 2 | 4 |
+: (3 2 4)
 
-** Wait what?
-You can see the linked list as =(1, ->) (2, ->) (3, ->) (4, END)=
 
-** =CADR= can be used for to trasverse the edges of a list
-=C{DA}R= combinations also exist. Limits are  =cdaaar= and =caaadr=.
-#+begin_src emacs-lisp :tangle yes :session car
+** =C{AD}R= functions enable processing lists with recursion.
+#+begin_src emacs-lisp
 (cadr my-list)
 #+end_src
 
 #+RESULTS:
 : 3
 
-** There is also a boring =nth=
-Note that it is zero-indexed.
-#+begin_src emacs-lisp :tangle yes :session car
+#+begin_src emacs-lisp
+(caddr my-list)
+#+end_src
+
+#+RESULTS:
+: 2
+
+#+begin_src emacs-lisp
+(cadddr my-list)
+#+end_src
+
+#+RESULTS:
+: 4
+
+** Does this all look weird?
+#+begin_quote
+"Why on Earth would anyone want to use a language with such horrific syntax?!"
+#+end_quote
+#+begin_JUSTIFYRIGHT
+Your average citizen facing lisp for the first time
+#+end_JUSTIFYRIGHT
+** There is also the (boring) =nth=
+#+begin_src emacs-lisp
 (nth 2 my-list)
 #+end_src
 
 #+RESULTS:
 : 2
 
-** Essentials
-Lambda
-#+begin_src emacs-lisp :results replace raw
-( lambda ( x ) (+ 1  x))
+Note that it is zero-indexed.
+** The basics: Flow control
+#+begin_src emacs-lisp
+(setq myvar 3)
 #+end_src
 
 #+RESULTS:
-(lambda (x) (+ 1 x))
+: 3
 
-It returns a function
 #+begin_src emacs-lisp
-(( lambda ( x ) (+ 1  x)) 2)
+(if (eql myvar 2) "The same" "Not the same")
+#+end_src
+
+#+RESULTS:
+: "Not the same"
+
+** The basics: Lambda
+#+begin_src emacs-lisp :results verbatim
+(lambda (x) (+ 1  x))
+#+end_src
+
+#+RESULTS:
+: (lambda (x) (+ 1 x))
+
+
+It returns a function that we can use at the start of a list.
+#+begin_src emacs-lisp
+((lambda (x) (+ 1  x)) 2)
 #+end_src
 
 #+RESULTS:
@@ -221,41 +399,266 @@ or the built-in =1+=
 #+RESULTS:
 : 3
 
-** Essentials
-Apply to list
-#+begin_src emacs-lisp :tangle yes
+You can use almost any symbol in variable and function names.
+
+** The basics: maps and filter
+#+begin_src emacs-lisp
 (mapcar '1+ my-list)
 #+end_src
 
 #+RESULTS:
-| 2 | 4 | 3 | 5 |
+: (2 4 3 5)
 
-** Essentials
-
-** CAR
-#+begin_src emacs-lisp :tangle yes :session car
+Two ways of filtering. Dash:
+#+begin_src emacs-lisp :tangle yes
+(-filter 'math-evenp my-list)
 #+end_src
 
+#+RESULTS:
+: (2 4)
+
+Common Lisp:
+#+begin_src emacs-lisp :tangle yes
+(cl-remove-if-not 'cl-evenp my-list)
+#+end_src
+
+#+RESULTS:
+: (2 4)
+
+** The basics: Function definition
+#+begin_src emacs-lisp
+(defun has-cat? (text)
+  (if (s-contains? "cat" text)
+  "Cat!"  "Nae :("))
+#+end_src
+
+#+RESULTS:
+: has-cat?
+
+#+begin_src emacs-lisp
+(has-cat? "giraffe dog ant")
+#+end_src
+
+#+RESULTS:
+: "Nae :("
+
+#+begin_src emacs-lisp
+(has-cat? "shark cat elephant")
+#+end_src
+
+#+RESULTS:
+#+begin_export latex
+"
+{\\fontspec{Symbola}\\char\"1F343}
+"
+#+end_export
+
+** How do we know if a function will be evaluated?
+These are all (kind-of) equivalent
+#+begin_src emacs-lisp
+(list (quote has-cat?)
+      'has-cat?
+      `has-cat?
+      #'has-cat?)
+#+end_src
+
+#+RESULTS:
+: (has-cat? has-cat? has-cat? has-cat?)
+
+But not all of these
+#+begin_src emacs-lisp
+'((quote has-cat?)
+ 'has-cat?
+  #'has-cat?)
+#+end_src
+
+#+RESULTS:
+: ('has-cat? 'has-cat? #'has-cat?)
+
+** We can selectively evaluate terms
+The backquote (=`=) is similar to the quote (='=) but evaluates elements preceded by a comma.
+#+begin_src emacs-lisp
+(let ((text "kittycat"))
+`((has-cat? text)
+ '(has-cat? text)
+ ,(has-cat? text)))
+#+end_src
+
+#+RESULTS:
+: ((has-cat? text) '(has-cat? text) "Cat!")
+
+** The programmable programming language
+What if there was a way to delay evaluating parts of an expression until compilation?
+** Example: Simplifying math operations
+We can use symbols for more expressiveness, and these functions modify the normal =+-*= on the fly.
+
+*** Insert on left :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:BEAMER_col: 0.45
+:END:
+#+begin_src emacs-lisp
+(->  10
+      (- 5)
+      (+ 7)
+      (* 3))
+#+end_src
+
+#+RESULTS:
+: 36
+
+*** Insert on right :B_exampleblock:BMCOL:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:BEAMER_col: 0.45
+:END:
+#+begin_src emacs-lisp
+(->>  10
+      (- 5)
+      (+ 7)
+      (* 3))
+#+end_src
+
+#+RESULTS:
+: 6
+
+** Example: Implementing Python's list comprehensions
+Task: Extend =elisp= to add support for list comprehension.
+#+BEGIN_SRC python :session py :results verbatim :exports both
+[x for x in range(10) if not (x % 2)]
+#+END_SRC
+
+#+RESULTS:
+: [0, 2, 4, 6, 8]
+
+** Example: Implementing Python's list comprehensions
+:PROPERTIES:
+:BEAMER_opt: shrink=35
+:END:
+#+begin_src emacs-lisp :tangle yes :exports code
+(defmacro lcomp (expression for var in list conditional conditional-test)
+  (let ((result (gensym)))
+    ;; the arguments are really code so we can substitute them
+    ;; store nil in the unique variable name generated above
+    `(let ((,result nil))
+       ;; var is a variable name
+       ;; list is the list literal we are suppose to iterate over
+       (cl-loop for ,var in ,list
+            ;; conditional is if or unless
+            ,conditional ,conditional-test
+            ;; and this is the action from the earlier lisp example
+            do (setq ,result (append ,result (list ,expression))))
+           ;; return the result
+       ,result)))
+
+(defun range (to) (number-sequence 0 (1- to )))
+#+end_src
+
+#+RESULTS:
+: range
+
+
+#+begin_src emacs-lisp
+(lcomp x for x in (range 10) if (= (mod x 2) 0))
+#+end_src
+
+#+RESULTS:
+: (0 2 4 6 8)
+
+
+
 * Conclusions
-** There is a Lisp for everyone
-There is a lisp for everyone
-- General purpose, old and reliable? =Common Lisp= (Steel Bank Common Lisp - SBCL)
-- Need access to Java libraries + Functional? =Clojure=
-- Learn Programming Language Theory, Build Doman-Specific Languages (DSL)? =Scheme/Racket=
-- Need more Emacs in your life or some life in your Emacs? =Emacs Lisp= (eLisp)
-- Nix but in a sensible language? =Scheme/GNU Guile=
-- Need =Lua= configs but miss parentheses? =Fennel=
-- Lisp-flavoured =Python=? =Hy=
+** Wrapping up
+- Macros are limited by language syntax.
+- S-Expressions encode as little a syntax as possible.
+- *Minimal syntax provides maximum flexibility and extensibility*
 
 ** Takeaways
-- The tools we use determine what we can do and not
-- Even if not in daily use, it offers many insight
+- The tools we use determine how we can tackle problems
+- Even as a recreational tool, Lisp offers insights into the nature of Computer Science
+- There is expertise in "old" designs. New is not always better.
+
+** There is a Lisp for every need
+- @@b:<1->@@ General purpose, old and reliable? =Common Lisp= (Steel Bank Common Lisp - SBCL)
+- @@b:<2->@@ Need access to =Java= libraries + Functional? =Clojure=
+- @@b:<3->@@ Learn Programming Language Theory, Build Doman-Specific Languages (DSL)? =Scheme/Racket=
+- @@b:<4->@@ More Emacs in your life and/or more life in your Emacs? =Emacs Lisp= (elisp)
+- @@b:<5->@@ Nix but in a sensible language? =Scheme/GNU Guile=
+- @@b:<6->@@ Need =Lua= configs but miss parentheses? =Fennel=
+- @@b:<7->@@ Lisp-flavoured =Python=? =Hy=
+
+** There is a Lisp for every need
+
+*** left :BMCOL:
+:PROPERTIES:
+:beamer_col: 0.33
+:end:
+#+attr_latex: :width 0.6 \linewidth
+[[./imgs/clojure.png]]
+#+begin_center
+Clojure
+#+end_center
+
+#+attr_latex: :width 0.6 \linewidth
+[[./imgs/racket.png]]
+
+#+begin_center
+Racket
+#+end_center
+*** center :bmcol:
+:properties:
+:beamer_col: 0.33
+:end:
+#+attr_latex: :width 0.6 \linewidth
+[[./imgs/cl.png]]
+#+begin_center
+Common Lisp
+#+end_center
+#+attr_latex: :width 0.6 \linewidth
+[[./imgs/elisp.png]]
+#+begin_center
+Emacs Lisp
+#+end_center
+
+#+attr_latex: :width 0.6 \linewidth
+[[./imgs/guile.png]]
+*** right :bmcol:
+:properties:
+:beamer_col: 0.33
+:END:
+#+ATTR_LATEX: :width 0.6 \linewidth
+[[./imgs/fennel.png]]
+#+begin_center
+Fennel
+#+end_center
+
+#+ATTR_LATEX: :width 0.6 \linewidth
+[[./imgs/hy.png]]
+#+begin_center
+Hy
+#+end_center
+
 
 ** The land of lisp and other wonders
+[[./imgs/lisp.jpg]]
 [[./imgs/lisp_cycles.png]]
 
-- [[https://youtu.be/HM1Zb3xmvMc?si=OEEVQuGmUVdf0gnn&t=63][click me to see the wonders of the world]]
+[[https://youtu.be/HM1Zb3xmvMc?si=OEEVQuGmUVdf0gnn&t=63][click me to see the wonders of the world]]
 
 ** For those interested
+- The mad lad who implemented comprehensions in common lisp
+- https://www.defmacro.org/ramblings/lisp.html
 - [[https://elliottslaughter.com/2022/12/lisp][Lisp innovations]]
-- [[https://paulgraham.com/progbot.html][Paul graham on "Programming bottom up"]]
+- [[https://paulgraham.com/progbot.html][Paul Graham's on "Programming bottom up"]]
+- [[https://guix.gnu.org/cookbook/en/guix-cookbook.html#A-Scheme-Crash-Course][Scheme crash course]]
+- [[https://stopa.io/post/265][An intuition for Lisp Syntax (for JS folks)]]
+- [[https://en.wikipedia.org/wiki/SHRDLU][SHRDLU]]: The (incidentally) first formal example of interactive fiction.
+
+** References
+This slides:  https://github.com/afermg/2024_06_lisp_primer_CSTutorials/blob/master/slides.org
+https://ericnormand.me/article/idea-of-lisp
+https://www.quora.com/What-did-Alan-Kay-mean-by-Lisp-is-the-greatest-single-programming-language-ever-designed/answer/Alan-Kay-11?share=1
+https://www.defmacro.org/ramblings/lisp.html
+https://dthompson.us/posts/lisp-icing-or-cake.html
+https://www.quora.com/What-did-Alan-Kay-mean-by-Lisp-is-the-greatest-single-programming-language-ever-designed/answer/Alan-Kay-11
+

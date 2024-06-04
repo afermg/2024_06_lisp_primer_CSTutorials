@@ -18,12 +18,16 @@ For this presentation I needed the logos for lisps
 
 (setq image-urls '(
                    ("cl" . "https://upload.wikimedia.org/wikipedia/commons/4/48/Lisp_logo.svg")
-                   ("racket". "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Lambda_lc.svg/1024px-Lambda_lc.svg.png")
+                   ("racket". "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Racket-logo.svg/640px-Racket-logo.svg.png")
                    ("scheme" . "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Lambda_lc.svg/1024px-Lambda_lc.svg.png")
                    ("fennel" . "https://fennel-lang.org/logo.svg")
                    ("clojure" . "https://upload.wikimedia.org/wikipedia/commons/5/5d/Clojure_logo.svg")
                    ("elisp" . "https://upload.wikimedia.org/wikipedia/commons/0/08/EmacsIcon.svg")
-                   ("Hy" . "https://upload.wikimedia.org/wikipedia/commons/8/87/Hy_Cuddles.png")))
+                   ("Hy" . "https://upload.wikimedia.org/wikipedia/commons/8/87/Hy_Cuddles.png")
+                   ("Guile" . "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/GNU-Guile-logo.svg/1200px-GNU-Guile-logo.svg.png")
+                   ("lisp" . "https://imgs.xkcd.com/comics/lisp.jpg")
+                   ("lisp_cycles" . "https://imgs.xkcd.com/comics/lisp_cycles.png")
+                   ("timeline". "https://f.hubspotusercontent40.net/hubfs/14516545/TimelineOfProgrammingLanguages.png")))
 #+end_src
 
 ** Download all files
