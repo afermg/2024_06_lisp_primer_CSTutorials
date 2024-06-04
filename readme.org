@@ -38,7 +38,6 @@ For this presentation I needed the logos for lisps
  (url-copy-file url (format "imgs/%s.%s" name (f-ext url)) t))) image-urls)
 #+end_src
 
-
 ** Convert svgs to png
 #+begin_src elisp 
 (mapcar (lambda (x) (shell-command

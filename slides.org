@@ -13,7 +13,7 @@
 #+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
 
 * Introduction
-** My Computer Science trumvirate
+** My Computer Science precuel
 - @@b:<1->@@ On the universality of plain text (2024/01/09)
 - @@b:<2->@@ A primer on Lisp (2024/06/04)
 - @@b:<3->@@ Emacs: The Editor of a Lifetime (?)
@@ -30,6 +30,10 @@ One of the motivations was that he (John McCarthy) wanted something like “Math
 #+begin_JUSTIFYRIGHT
 Alan Kay (@Quora), 2018
 #+end_JUSTIFYRIGHT
+
+** Literally Alan Kay answered a question about him
+#+ATTR_LATEX: width=0.5\linewidth
+[[./imgs/alan_kay_quora.png]]
 
 ** Bits of history
  - Designed by John McCarthy (1958); Implemented by Steve Rusell.
@@ -103,7 +107,7 @@ Example:
 - We can then write code that writes code.
 - Modifying underlying code (even at compilation is quite easy)
 
-Macros (not lisp-exclusive) are "functions" that write functions whose inputs are used at compilation.
+Macros (not lisp-exclusive) are "functions" that write functions whose inputs can be adjusted at compilation.
 
 ** It is hard to explain why this matters
 #+begin_quote
@@ -113,12 +117,13 @@ Metaprogramming, code and data in one representation, self-modifying programs, d
 #+begin_JUSTIFYRIGHT
 Slava Akhmechet, 2006
 #+end_JUSTIFYRIGHT
+
 ** I will play the enlightenment card
 #+begin_quote
 "Lisp is worth learning for the profound enlightenment experience you will have when you finally get it; that experience will make you a better programmer for the rest of your days, even if you never actually use Lisp itself a lot." I never understood this statement. I never believed it could be true. And finally, after all the pain, it made sense!
 #+end_quote
 #+begin_JUSTIFYRIGHT
-The same bloke as before, a few paragraphs later
+The same person as before, a few paragraphs later
 #+end_JUSTIFYRIGHT
 
 * Use-cases
@@ -134,10 +139,13 @@ The same bloke as before, a few paragraphs later
 ** Integrates perfectly with reproducible org-mode notebooks
 #+ATTR_LATEX: :width 0.75 \linewidth
 [[./imgs/org_lisp.png]]
-**
+
+** It is a general purpose language, so pretty much anything
+[[./imgs/elisp_in_this_repo.png]]
+
 ** Who uses Lisp anyways?
 *** Grammarly (CL)
-*** The London Tube (CL)!
+*** The London Tube (CL)
 *** Walmart (Clojure)
 *** Puppet (and hence the Broad, Clojure)
 *** Nubank (Clojure)
@@ -301,7 +309,8 @@ Equivalent to a quote (='=)
 #+end_src
 
 ** CAR + CDR on lists
-In any list, the first item is the value and the second is a link to the next value.
+In any list, the first item is the value, the second is a link to the next value.
+Think of them as =first= and =rest=!
 
 #+begin_src emacs-lisp
 (setq my-list '(1 3 2 4))
@@ -318,7 +327,6 @@ In any list, the first item is the value and the second is a link to the next va
 
 #+RESULTS:
 : (3 2 4)
-
 
 ** =C{AD}R= functions enable processing lists with recursion.
 #+begin_src emacs-lisp
@@ -358,22 +366,7 @@ Your average citizen facing lisp for the first time
 : 2
 
 Note that it is zero-indexed.
-** The basics: Flow control
-#+begin_src emacs-lisp
-(setq myvar 3)
-#+end_src
-
-#+RESULTS:
-: 3
-
-#+begin_src emacs-lisp
-(if (eql myvar 2) "The same" "Not the same")
-#+end_src
-
-#+RESULTS:
-: "Not the same"
-
-** The basics: Lambda
+** Lambda
 #+begin_src emacs-lisp :results verbatim
 (lambda (x) (+ 1  x))
 #+end_src
@@ -401,7 +394,7 @@ or the built-in =1+=
 
 You can use almost any symbol in variable and function names.
 
-** The basics: maps and filter
+** maps and filter
 #+begin_src emacs-lisp
 (mapcar '1+ my-list)
 #+end_src
@@ -425,7 +418,31 @@ Common Lisp:
 #+RESULTS:
 : (2 4)
 
-** The basics: Function definition
+** Flow control: If
+
+#+begin_src emacs-lisp
+(setq myvar (list 1 2 3 4 5))
+(if (eql 3 (nth 1 myvar))
+    "The same" "Not the same")
+#+end_src
+
+** Flow control: When/Unless
+#+RESULTS:
+: "Not the same"
+
+#+begin_src emacs-lisp
+(mapcar (lambda (x)  (when (> x 2) x))
+        myvar)
+#+end_src
+
+#+RESULTS:
+: (nil nil 3 4 5)
+
+#+begin_src emacs-lisp
+(mapcar (lambda (x)  (unless (> x 2) x))
+        myvar)
+#+end_src
+** Function definition
 #+begin_src emacs-lisp
 (defun has-cat? (text)
   (if (s-contains? "cat" text)
@@ -564,12 +581,10 @@ Task: Extend =elisp= to add support for list comprehension.
 #+RESULTS:
 : (0 2 4 6 8)
 
-
-
 * Conclusions
 ** Wrapping up
 - Macros are limited by language syntax.
-- S-Expressions encode as little a syntax as possible.
+- S-Expressions (S for symbolic) encode as little a syntax as possible.
 - *Minimal syntax provides maximum flexibility and extensibility*
 
 ** Takeaways
@@ -639,25 +654,24 @@ Hy
 
 
 ** The land of lisp and other wonders
-[[./imgs/lisp.jpg]]
 [[./imgs/lisp_cycles.png]]
+[[./imgs/lisp.jpg]]
 
 [[https://youtu.be/HM1Zb3xmvMc?si=OEEVQuGmUVdf0gnn&t=63][click me to see the wonders of the world]]
 
 ** For those interested
-- The mad lad who implemented comprehensions in common lisp
-- https://www.defmacro.org/ramblings/lisp.html
-- [[https://elliottslaughter.com/2022/12/lisp][Lisp innovations]]
+- [[https://stopa.io/post/265][An intuition for Lisp Syntax (for JS folks)]]
+- The mad lad who [[https://stackoverflow.com/a/4621882][implemented]] comprehensions in Common Lisp
+- Peter Seibel's [[https://gigamonkeys.com/book/][Practical Common Lisp]]
 - [[https://paulgraham.com/progbot.html][Paul Graham's on "Programming bottom up"]]
 - [[https://guix.gnu.org/cookbook/en/guix-cookbook.html#A-Scheme-Crash-Course][Scheme crash course]]
-- [[https://stopa.io/post/265][An intuition for Lisp Syntax (for JS folks)]]
 - [[https://en.wikipedia.org/wiki/SHRDLU][SHRDLU]]: The (incidentally) first formal example of interactive fiction.
-
+- [[https://dthompson.us/posts/lisp-icing-or-cake.html][Is lisp the icing or the cake?]]
+- [[https://github.com/scicloj?q=yy&type=all&language=&sort=][Data Science in Clojure]]
+https://github.com/scicloj?q=yy&type=all&language=&sort=
 ** References
-This slides:  https://github.com/afermg/2024_06_lisp_primer_CSTutorials/blob/master/slides.org
-https://ericnormand.me/article/idea-of-lisp
-https://www.quora.com/What-did-Alan-Kay-mean-by-Lisp-is-the-greatest-single-programming-language-ever-designed/answer/Alan-Kay-11?share=1
-https://www.defmacro.org/ramblings/lisp.html
-https://dthompson.us/posts/lisp-icing-or-cake.html
-https://www.quora.com/What-did-Alan-Kay-mean-by-Lisp-is-the-greatest-single-programming-language-ever-designed/answer/Alan-Kay-11
-
+- This slides: https://github.com/afermg/2024_06_lisp_primer_CSTutorials/blob/master/slides.pdf
+- https://ericnormand.me/article/idea-of-lisp
+- [[https://elliottslaughter.com/2022/12/lisp][Lisp innovations]]
+- [[https://www.defmacro.org/ramblings/lisp.html][Some of the quotes]]
+- Alan's Kay [[https://www.quora.com/What-did-Alan-Kay-mean-by-Lisp-is-the-greatest-single-programming-language-ever-designed/answer/Alan-Kay-11][response]] on Quora
